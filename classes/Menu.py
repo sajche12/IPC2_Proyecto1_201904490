@@ -1,24 +1,18 @@
-from .ListaSimple import *
 from .ListaSimple import ListaEnlazada
 import xml.etree.ElementTree as ET
-from tkinter import *
-from tkinter import filedialog
+from tkinter.filedialog import askopenfilename
+
+lista = ListaEnlazada() 
 
 def cargar_archivo(self):
-    lista = ListaEnlazada() 
-    try:
-        raiz = Tk()
-        archivo = filedialog.askopenfilename(initialdir="C:/")
-        xml_archivo = ET.parse(archivo)
-        ruta = xml_archivo.getroot()
-        for organismo in ruta.iter('organismo'):    #Agregando el codigo y nombre de los organismos a la lista
-            lista.agregarCodigo(organismo.find('codigo').text)
-            lista.agregarNombre(organismo.find('nombre').text)
-        lista.imprimir()
-        raiz.mainloop()
-    except Exception as error:
-        print(f"Error: {error}")
-
+    filename = askopenfilename()
+    xml_archivo = ET.parse(filename)
+    ruta = xml_archivo.getroot()
+    for organismo in ruta.iter('organismo'):    #Agregando el codigo y nombre de los organismos a la lista
+        lista.agregarCodigo(organismo.find('codigo').text)
+        lista.agregarNombre(organismo.find('nombre').text)
+    lista.imprimir()
+        
 class Menu:
     while True:   #Creando Menu de opciones
         print("Menú:")
@@ -42,6 +36,7 @@ class Menu:
             print("opcion 4")
         elif opcion == "5":
             print("Seleccione el archivo a cargar...")
+            cargar_archivo()
         elif opcion == "6":
             print("Saliendo del menú...")
             break
