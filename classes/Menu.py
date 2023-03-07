@@ -1,4 +1,4 @@
-from os import system
+from os import system, startfile
 import xml.etree.ElementTree as ET
 from tkinter.filedialog import askopenfilename
 from .Organismo import Organismo
@@ -48,13 +48,16 @@ class Menu:
 
         codigoGraphiz = """
             digraph structs {
+                """
+        codigoGraphiz = codigoGraphiz + f'label = "{self.muestraAnalizada.descripcion} - Muestra de: {self.muestraAnalizada.dimensionX} filas y {self.muestraAnalizada.dimensionY} columnas"'
+        codigoGraphiz = codigoGraphiz + """
                 node [shape=record];
                 MATRIZ [
                     label="
         """
         cuentaX = -1
         cuentaY = -1
-        while (cuentaX < int(x)):
+        while (cuentaX <= int(x)):
             if(cuentaY == -1):
                 codigoGraphiz=codigoGraphiz+'{x,y'
             else:
@@ -62,7 +65,7 @@ class Menu:
             
             cuentaY = 0
             
-            while (cuentaY < int(y)):
+            while (cuentaY <= int(y)):
                 
                 if(cuentaX == -1):
                     codigoGraphiz=codigoGraphiz+'|'+str(cuentaY)
@@ -98,7 +101,7 @@ class Menu:
             cuentaX = cuentaX + 1
             
             if(cuentaX == int(x)):
-                codigoGraphiz=codigoGraphiz+'}'
+                codigoGraphiz=codigoGraphiz+'}|'
             else:
                 codigoGraphiz=codigoGraphiz+'}|'
 
@@ -114,10 +117,26 @@ class Menu:
         codigoGraphiz =codigoGraphiz+ """
                     \"}     
         """
-        archivo = open("muestra.txt","w")
+        archivo = open("codigoGraphiz.dot","w")
         archivo.write(codigoGraphiz)
-        system("C:\\Users\\ACER\\Desktop\\Proyecto1\\generarImagen.bat")
-       
+        archivo.close()
+        system('dot -Tpng codigoGraphiz.dot -o codigoGraphiz.png')
+        system('cd ./codigoGraphiz.png')
+        startfile('codigoGraphiz.png')
+    
+    def analizarOrganismos(self):
+        organismos = self.muestraAnalizada.listaOrganismos
+        auxiliar = organismos.cabeza
+        i = 1
+        print()
+        while(auxiliar != None):
+            organismo:Organismo = auxiliar.dato
+            print(f"{i}. {organismo.nombre} - {organismo.codigo}")
+            auxiliar = auxiliar.siguiente
+            i += 1
+        opcion = int(input("\nIngrese el numero del organismo a elegir: "))
+        
+        
     def pedirNumeroEntero(self):    #Metodo para seleccionar una opcion en el menu
         correcto=False
         num=0
@@ -133,12 +152,20 @@ class Menu:
         salir = False
         opcion = 0
         while not salir:
+            print("\n##          ###    ########   #######  ########     ###    ########  #######  ########  ####  #######  ")
+            print("##         ## ##   ##     ## ##     ## ##     ##   ## ##      ##    ##     ## ##     ##  ##  ##     ## ")
+            print("##        ##   ##  ##     ## ##     ## ##     ##  ##   ##     ##    ##     ## ##     ##  ##  ##     ## ")
+            print("##       ##     ## ########  ##     ## ########  ##     ##    ##    ##     ## ########   ##  ##     ## ")
+            print("##       ######### ##     ## ##     ## ##   ##   #########    ##    ##     ## ##   ##    ##  ##     ## ")
+            print("##       ##     ## ##     ## ##     ## ##    ##  ##     ##    ##    ##     ## ##    ##   ##  ##     ## ")
+            print("######## ##     ## ########   #######  ##     ## ##     ##    ##     #######  ##     ## ####  #######  ")
             print("\n------------------------")
             print("-----MENU PRINCIPAL-----")
             print("1. Cargar Archivo XML")
             print("2. Generar Muestra")
             print("3. Seleccionar un organismo")
-            print("4. Salir")
+            print("4. Generar archivo de Salida")
+            print("5. Salir")
             print("------------------------\n")
             
             print ("Elige una opcion")
@@ -155,9 +182,11 @@ class Menu:
                 self.graficarMuestra()
                 print("\n¡LA MUESTRA SE GENERO CORRECTAMENTE!")
             elif opcion == 3:
-                print("Opcion 3")
+                self.analizarOrganismos()
             elif opcion == 4:
+                pass
+            elif opcion == 5:
                 salir = True
             else:
-                print ("Introduce un numero entre 1 y 3")
-        print ("Fin del Programa")
+                print ("\nIntroduce un numero entre 1 y 5")
+        print ("\nFIN DEL PROGRAMA")

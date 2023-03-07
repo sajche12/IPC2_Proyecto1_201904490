@@ -16,9 +16,3 @@ class ListaEnlazada:    #Creando clase de la lista enlazada
             while nodo_actual.siguiente is not None:
                 nodo_actual = nodo_actual.siguiente
             nodo_actual.siguiente = nuevo_nodo
-            
-    def imprimir(self):     #Metodo para imprimir los nodos
-        nodo_actual = self.cabeza
-        while nodo_actual is not None:
-            print(nodo_actual.dato)
-            nodo_actual = nodo_actual.siguiente
